@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilgi Formu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 0.5s ease-in-out;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-container.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message, .error-message {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2 class="form-title">Bilgi Formu</h2>
+        <form id="bilgiFormu">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ad">Ad *</label>
+                    <input type="text" id="ad" name="ad" required>
+                </div>
+                <div class="form-group">
+                    <label for="soyad">Soyad *</label>
+                    <input type="text" id="soyad" name="soyad" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-posta *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="telefon">Telefon</label>
+                    <input type="tel" id="telefon" name="telefon" placeholder="0555 123 45 67">
+                </div>
+                <div class="form-group">
+                    <label for="dogumTarihi">Doğum Tarihi</label>
+                    <input type="date" id="dogumTarihi" name="dogumTarihi">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cinsiyet">Cinsiyet</label>
+                    <select id="cinsiyet" name="cinsiyet">
+                        <option value="">Seçiniz</option>
+                        <option value="erkek">Erkek</option>
+                        <option value="kadin">Kadın</option>
+                        <option value="belirtmek_istemiyorum">Belirtmek istemiyorum</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sehir">Şehir</label>
+                    <select id="sehir" name="sehir">
+                        <option value="">Seçiniz</option>
+                        <option value="ankara">Ankara</option>
+                        <option value="istanbul">İstanbul</option>
+                        <option value="izmir">İzmir</option>
+                        <option value="bursa">Bursa</option>
+                        <option value="antalya">Antalya</option>
+                        <option value="adana">Adana</option>
+                        <option value="konya">Konya</option>
+                        <option value="gaziantep">Gaziantep</option>
+                        <option value="diger">Diğer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="meslek">Meslek</label>
+                <input type="text" id="meslek" name="meslek">
+            </div>
+
+            <div class="form-group">
+                <label for="ilgiAlanlari">İlgi Alanları</label>
+                <textarea id="ilgiAlanlari" name="ilgiAlanlari" placeholder="İlgi alanlarınızı yazınız..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sozlesme" name="sozlesme" required>
+                    <label for="sozlesme">Kişisel verilerin işlenmesi hakkındaki aydınlatma metnini okudum ve kabul ediyorum. *</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="pazarlama" name="pazarlama">
+                    <label for="pazarlama">Pazarlama e-postalarını almak istiyorum.</label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Gönder</button>
+            
+            <div class="success-message" id="successMessage">
+                Bilgileriniz başarıyla gönderildi! Teşekkür ederiz.
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                Bir hata oluştu. Lütfen tekrar deneyin veya bizimle iletişime geçin.
+            </div>
+        </form>
+    </div>
+
+    <!-- EmailJS CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <script>
+        // EmailJS'i başlat
+        (function(){
+            emailjs.init("YOUR_USER_ID"); // EmailJS hesabınızdaki User ID'yi buraya yazın
+        })();
+
+        document.getElementById('bilgiFormu').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Loading durumu
+            const formContainer = document.querySelector('.form-container');
+            const submitBtn = document.querySelector('.submit-btn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            // Önceki mesajları gizle
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Loading durumu ekle
+            formContainer.classList.add('loading');
+            submitBtn.textContent = 'Gönderiliyor...';
+            submitBtn.disabled = true;
+            
+            // Form verilerini topla
+            const formData = new FormData(this);
+            const templateParams = {};
+            
+            for (let [key, value] of formData.entries()) {
+                templateParams[key] = value;
+            }
+            
+            // Checkbox'ları kontrol et
+            templateParams.sozlesme = document.getElementById('sozlesme').checked ? 'Evet' : 'Hayır';
+            templateParams.pazarlama = document.getElementById('pazarlama').checked ? 'Evet' : 'Hayır';
+            
+            // Tarih formatla
+            if (templateParams.dogumTarihi) {
+                const tarih = new Date(templateParams.dogumTarihi);
+                templateParams.dogumTarihi = tarih.toLocaleDateString('tr-TR');
+            }
+            
+            // Gönderim tarihi ekle
+            templateParams.gonderimTarihi = new Date().toLocaleDateString('tr-TR') + ' ' + new Date().toLocaleTimeString('tr-TR');
+            
+            // E-posta gönder (EmailJS kullanıyorsanız)
+            /*
+            emailjs.send(
+                'YOUR_SERVICE_ID',      // EmailJS servis ID'niz
+                'YOUR_TEMPLATE_ID',     // EmailJS şablon ID'niz
+                templateParams
+            ).then(function(response) {
+                console.log('E-posta başarıyla gönderildi!', response.status, response.text);
+                
+                // Loading'i kaldır
+                formContainer.classList.remove('loading');
+                submitBtn.textContent = 'Gönder';
+                submitBtn.disabled = false;
+                
+                // Başarı mesajını göster
+                successMsg.style.display = 'block';
+                
+                // Formu sıfırla
+                document.getElementById('bilgiFormu').reset();
+                
+                // Sayfayı yukarı kaydır
+                document.querySelector('.form-container').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+            }, function(error) {
+                console.error('E-posta gönderme hatası:', error);
+                
+                // Loading'i kaldır
+                formContainer.classList.remove('loading');
+                submitBtn.textContent = 'Gönder';
+                submitBtn.disabled = false;
+                
+                // Hata mesajını göster
+                errorMsg.style.display = 'block';
+            });
+            */
+            
+            // Demo için - EmailJS olmadan test edilebilir
+            setTimeout(function() {
+                // Loading'i kaldır
+                formContainer.classList.remove('loading');
+                submitBtn.textContent = 'Gönder';
+                submitBtn.disabled = false;
+                
+                // Başarı mesajını göster
+                successMsg.style.display = 'block';
+                
+                // Formu sıfırla
+                document.getElementById('bilgiFormu').reset();
+                
+                // Sayfayı yukarı kaydır
+                document.querySelector('.form-container').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+                console.log('Form verileri:', templateParams);
+            }, 2000); // 2 saniye bekleyip başarı mesajı göster
+        });
+
+        // Telefon numarası formatlaması
+        document.getElementById('telefon').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 4) {
+                value = value.substring(0, 4) + ' ' + value.substring(4);
+            }
+            if (value.length >= 8) {
+                value = value.substring(0, 8) + ' ' + value.substring(8);
+            }
+            if (value.length >= 11) {
+                value = value.substring(0, 11) + ' ' + value.substring(11);
+            }
+            e.target.value = value;
+        });
+
+        // Form alanları için animasyon
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.2s ease';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
