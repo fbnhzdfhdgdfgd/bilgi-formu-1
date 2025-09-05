@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,7 +21,7 @@
             padding: 20px;
         }
 
-        .form-container {
+        .form-container, .thank-you-container {
             background: white;
             padding: 40px;
             border-radius: 15px;
@@ -37,9 +37,50 @@
             pointer-events: none;
         }
 
+        .thank-you-container {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .thank-you-message {
+            font-size: 48px;
+            color: #dc2626;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: blink 1.5s infinite;
+        }
+
+        .thank-you-subtitle {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .back-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
         }
 
         .form-title {
@@ -74,18 +115,18 @@
         input, select, textarea {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #fee2e2;
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s ease;
-            background-color: #fafafa;
+            background-color: #fef7f7;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #dc2626;
             background-color: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
         }
 
         textarea {
@@ -101,12 +142,13 @@
 
         .checkbox-group input[type="checkbox"] {
             width: auto;
+            accent-color: #dc2626;
         }
 
         .submit-btn {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -120,7 +162,7 @@
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
         }
 
         .submit-btn:active {
@@ -141,15 +183,15 @@
         }
 
         .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: #fecaca;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
         }
 
         .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
         }
 
         @media (max-width: 768px) {
@@ -158,14 +200,23 @@
                 gap: 0;
             }
             
-            .form-container {
+            .form-container, .thank-you-container {
                 padding: 30px 20px;
+            }
+
+            .thank-you-message {
+                font-size: 36px;
+            }
+
+            .thank-you-subtitle {
+                font-size: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
+    <!-- FORM SAYFASI -->
+    <div class="form-container" id="formContainer">
         <h2 class="form-title">Bilgi Formu</h2>
         <form id="bilgiFormu">
             <div class="form-row">
@@ -258,6 +309,13 @@
         </form>
     </div>
 
+    <!-- TEŞEKKÜR SAYFASI -->
+    <div class="thank-you-container" id="thankYouContainer">
+        <div class="thank-you-message">TEŞEKKÜR EDERİZ!</div>
+        <div class="thank-you-subtitle">Bilgileriniz başarıyla alındı.</div>
+        <button class="back-button" onclick="showForm()">Yeni Form Doldur</button>
+    </div>
+
     <!-- EmailJS CDN -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
@@ -266,6 +324,16 @@
         (function(){
             emailjs.init("YOUR_USER_ID"); // EmailJS hesabınızdaki User ID'yi buraya yazın
         })();
+
+        function showForm() {
+            document.getElementById('formContainer').style.display = 'block';
+            document.getElementById('thankYouContainer').style.display = 'none';
+        }
+
+        function showThankYou() {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('thankYouContainer').style.display = 'block';
+        }
 
         document.getElementById('bilgiFormu').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -320,16 +388,11 @@
                 submitBtn.textContent = 'Gönder';
                 submitBtn.disabled = false;
                 
-                // Başarı mesajını göster
-                successMsg.style.display = 'block';
+                // Teşekkür sayfasını göster
+                showThankYou();
                 
                 // Formu sıfırla
                 document.getElementById('bilgiFormu').reset();
-                
-                // Sayfayı yukarı kaydır
-                document.querySelector('.form-container').scrollIntoView({ 
-                    behavior: 'smooth' 
-                });
                 
             }, function(error) {
                 console.error('E-posta gönderme hatası:', error);
@@ -351,19 +414,14 @@
                 submitBtn.textContent = 'Gönder';
                 submitBtn.disabled = false;
                 
-                // Başarı mesajını göster
-                successMsg.style.display = 'block';
+                // Teşekkür sayfasını göster
+                showThankYou();
                 
                 // Formu sıfırla
                 document.getElementById('bilgiFormu').reset();
                 
-                // Sayfayı yukarı kaydır
-                document.querySelector('.form-container').scrollIntoView({ 
-                    behavior: 'smooth' 
-                });
-                
                 console.log('Form verileri:', templateParams);
-            }, 2000); // 2 saniye bekleyip başarı mesajı göster
+            }, 2000); // 2 saniye bekleyip teşekkür sayfası göster
         });
 
         // Telefon numarası formatlaması
